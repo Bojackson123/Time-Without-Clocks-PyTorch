@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 def analyze_video(frames):
     
     # Load the frames from the given directory
-    frame_paths = [os.path.join(frames, file) for file in os.listdir(frames) if file.endswith(".png")]
+    frame_paths = [os.path.join(frames, file) for file in os.listdir(frames) if file.endswith(".jpg")]
 
     # Load the trained regression model
     models_list = load('pretrained_regression/regression_model.joblib')
@@ -69,6 +69,12 @@ def analyze_video(frames):
     
     # Return the figures and JSON data for each attention value as a dict
     return figures, json_datas
+
+def average_predict(models, X_new):
+    # Make predictions with all models
+    predictions = np.array([model.predict(X_new) for model in models])
+    # Average the predictions across all models
+    return np.mean(predictions, axis=0)    
 
 # Shapes the frame to a square by cropping the longer side
 def shape_frame(frame):
